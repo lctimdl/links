@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .exam-container {
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .exam-container iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="exam-container">
+    <iframe
+      src="https://script.google.com/macros/s/AKfycbwLVxVUKxz8FELhLzzYe9zXyi0RmlxSfrlmZAvfHa_7wdmNv3_b9vutjIKkNLVQgOYW/exec"
+      allow="fullscreen"
+      loading="eager">
+    </iframe>
+  </div>
+
+</body>
+</html>
