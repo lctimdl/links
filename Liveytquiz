@@ -1,0 +1,2845 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <title>UPMSP Solutions - Class 10 Science Live Quiz</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Rajdhani:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'Noto Sans Devanagari', 'sans-serif'],
+            display: ['Rajdhani', 'Inter', 'sans-serif'],
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+      user-select: none;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: #030712;
+      color: #f8fafc;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: 'Inter', 'Noto Sans Devanagari', sans-serif;
+    }
+
+    /* =========================================
+       9:16 VERTICAL BROADCAST VIEWPORT
+       ========================================= */
+
+    .stream-viewport {
+      position: relative;
+
+      width: 100vw;
+      height: 100vh;
+
+      max-width: calc(100vh * 9 / 16);
+      max-height: calc(100vw * 16 / 9);
+
+      aspect-ratio: 9 / 16;
+
+      background:
+        radial-gradient(
+          circle at 50% 8%,
+          #1e1b4b 0%,
+          #090d1a 42%,
+          #030712 100%
+        );
+
+      display: flex;
+      flex-direction: column;
+
+      /* Reduced padding for vertical YouTube live */
+      padding: 1.25rem 1.45rem 0.9rem 1.45rem;
+
+      box-shadow:
+        0 0 50px rgba(0,0,0,0.9),
+        0 0 2px rgba(56,189,248,0.3);
+
+      overflow: hidden;
+    }
+
+    /* =========================================
+       BACKGROUND
+       ========================================= */
+
+    .bg-grid {
+      position: absolute;
+      inset: 0;
+
+      background-image:
+        linear-gradient(
+          to right,
+          rgba(56,189,248,0.025) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          to bottom,
+          rgba(56,189,248,0.025) 1px,
+          transparent 1px
+        );
+
+      background-size: 30px 30px;
+
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .ambient-light-top {
+      position: absolute;
+      top: -130px;
+      left: 50%;
+
+      transform: translateX(-50%);
+
+      width: 420px;
+      height: 240px;
+
+      background:
+        radial-gradient(
+          ellipse,
+          rgba(59,130,246,0.25) 0%,
+          rgba(14,165,233,0.07) 50%,
+          transparent 80%
+        );
+
+      filter: blur(40px);
+
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .ambient-light-bottom {
+      position: absolute;
+      bottom: -90px;
+      left: 50%;
+
+      transform: translateX(-50%);
+
+      width: 360px;
+      height: 190px;
+
+      background:
+        radial-gradient(
+          ellipse,
+          rgba(99,102,241,0.20) 0%,
+          transparent 70%
+        );
+
+      filter: blur(45px);
+
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* =========================================
+       HEADER
+       ========================================= */
+
+    header {
+      flex-shrink: 0;
+    }
+
+    /* =========================================
+       TIMER BAR
+       Now placed ABOVE question
+       ========================================= */
+
+    .timer-area {
+      position: relative;
+      z-index: 20;
+
+      width: 100%;
+
+      margin-top: 0.55rem;
+      margin-bottom: 0.7rem;
+    }
+
+    .timer-track {
+      width: 100%;
+      height: 9px;
+
+      background: rgba(15,23,42,0.92);
+
+      border-radius: 999px;
+
+      padding: 2px;
+
+      border: 1px solid rgba(71,85,105,0.75);
+
+      box-shadow:
+        inset 0 2px 4px rgba(0,0,0,0.8);
+      
+      overflow: hidden;
+    }
+
+    .timer-fill {
+      height: 100%;
+      width: 100%;
+
+      border-radius: 999px;
+
+      will-change: width, background, box-shadow;
+
+      transition:
+        background 0.35s ease,
+        box-shadow 0.35s ease;
+    }
+
+    .timer-normal {
+      background:
+        linear-gradient(
+          90deg,
+          #0284c7 0%,
+          #06b6d4 50%,
+          #38bdf8 100%
+        );
+
+      box-shadow:
+        0 0 16px rgba(56,189,248,0.65);
+    }
+
+    .timer-warning {
+      background:
+        linear-gradient(
+          90deg,
+          #d97706 0%,
+          #f59e0b 50%,
+          #fbbf24 100%
+        );
+
+      box-shadow:
+        0 0 20px rgba(245,158,11,0.85);
+
+      animation: subtlePulse 1.4s infinite ease-in-out;
+    }
+
+    .timer-critical {
+      background:
+        linear-gradient(
+          90deg,
+          #dc2626 0%,
+          #ef4444 50%,
+          #f87171 100%
+        );
+
+      box-shadow:
+        0 0 24px rgba(239,68,68,0.95);
+
+      animation: subtlePulseCritical 0.8s infinite ease-in-out;
+    }
+
+    .timer-answer {
+      background:
+        linear-gradient(
+          90deg,
+          #059669 0%,
+          #10b981 50%,
+          #34d399 100%
+        );
+
+      box-shadow:
+        0 0 22px rgba(16,185,129,0.8);
+    }
+
+    @keyframes subtlePulse {
+      0%,100% {
+        opacity: 1;
+        filter: brightness(1);
+      }
+
+      50% {
+        opacity: 0.88;
+        filter: brightness(1.2);
+      }
+    }
+
+    @keyframes subtlePulseCritical {
+      0%,100% {
+        opacity: 1;
+        filter: brightness(1);
+      }
+
+      50% {
+        opacity: 0.82;
+        filter: brightness(1.35);
+      }
+    }
+
+    /* =========================================
+       QUESTION AREA
+       ========================================= */
+
+    #question-container {
+      position: relative;
+      z-index: 10;
+
+      width: 100%;
+
+      /* Slightly moved upward */
+      margin-top: 0.15rem;
+      margin-bottom: auto;
+
+      padding-top: 0.1rem;
+      padding-bottom: 0.3rem;
+    }
+
+    .question-counter {
+      display: flex;
+      justify-content: center;
+
+      margin-bottom: 0.55rem;
+    }
+
+    .question-counter-inner {
+      padding: 0.28rem 0.85rem;
+
+      border-radius: 999px;
+
+      background: rgba(30,41,59,0.82);
+
+      border: 1px solid rgba(71,85,105,0.8);
+
+      box-shadow:
+        0 2px 8px rgba(0,0,0,0.25);
+    }
+
+    /* =========================================
+       QUESTION CARD
+       Smaller than original
+       ========================================= */
+
+    .question-card {
+      border-radius: 1rem;
+
+      padding: 0.95rem 1rem;
+
+      background: rgba(15,23,42,0.84);
+
+      border: 1px solid rgba(71,85,105,0.62);
+
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+
+      box-shadow:
+        0 8px 28px rgba(0,0,0,0.48);
+    }
+
+    .question-text {
+      text-shadow:
+        0 2px 8px rgba(0,0,0,0.6);
+
+      line-height: 1.38;
+    }
+
+    /* =========================================
+       OPTION CARDS
+       Smaller and tighter
+       ========================================= */
+
+    .options-grid {
+      margin-top: 0.65rem;
+
+      display: grid;
+      grid-template-columns: 1fr;
+
+      gap: 0.42rem;
+    }
+
+    .option-card {
+      transition:
+        all 0.3s cubic-bezier(0.16,1,0.3,1);
+
+      border:
+        1px solid rgba(255,255,255,0.08);
+
+      background:
+        rgba(15,23,42,0.72);
+
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .option-letter {
+      transition: all 0.25s ease;
+
+      background:
+        rgba(255,255,255,0.055);
+
+      border:
+        1px solid rgba(255,255,255,0.12);
+
+      color: #94a3b8;
+    }
+
+    /* Correct Answer */
+
+    .option-card.correct {
+      background:
+        linear-gradient(
+          90deg,
+          rgba(5,150,105,0.38) 0%,
+          rgba(16,185,129,0.18) 100%
+        ) !important;
+
+      border:
+        2px solid #10b981 !important;
+
+      box-shadow:
+        0 0 24px rgba(16,185,129,0.42),
+        inset 0 0 14px rgba(16,185,129,0.18) !important;
+
+      transform: scale(1.015);
+
+      color: #ffffff !important;
+    }
+
+    .option-card.correct .option-letter {
+      background: #10b981 !important;
+
+      border-color: #34d399 !important;
+
+      color: #022c22 !important;
+
+      font-weight: 900;
+
+      box-shadow:
+        0 0 10px rgba(16,185,129,0.75);
+    }
+
+    /* Wrong options after reveal */
+
+    .option-card.dimmed {
+      opacity: 0.30;
+
+      filter: grayscale(45%);
+
+      transform: scale(0.985);
+
+      border-color:
+        rgba(255,255,255,0.04) !important;
+    }
+
+    /* =========================================
+       FOOTER
+       No timer text here
+       ========================================= */
+
+    footer {
+      position: relative;
+      z-index: 10;
+
+      flex-shrink: 0;
+
+      width: 100%;
+
+      padding-top: 0.45rem;
+      padding-bottom: 0.15rem;
+    }
+
+    .footer-line {
+      width: 100%;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      margin-top: 0.25rem;
+
+      padding-top: 0.35rem;
+
+      border-top:
+        1px solid rgba(30,41,59,0.65);
+
+      font-size: 9px;
+    }
+
+    /* =========================================
+       QUESTION TRANSITION
+       ========================================= */
+
+    .animate-content-switch {
+      animation:
+        stageFadeIn 0.32s
+        cubic-bezier(0.16,1,0.3,1)
+        forwards;
+    }
+
+    @keyframes stageFadeIn {
+
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+    }
+
+    /* =========================================
+       EXTRA SMALL VERTICAL SCREENS
+       ========================================= */
+
+    @media (max-height: 700px) {
+
+      .stream-viewport {
+        padding:
+          0.8rem
+          1rem
+          0.6rem
+          1rem;
+      }
+
+      .question-card {
+        padding:
+          0.7rem
+          0.8rem;
+      }
+
+      .options-grid {
+        gap: 0.3rem;
+        margin-top: 0.5rem;
+      }
+
+      .option-card {
+        padding:
+          0.55rem
+          0.65rem;
+      }
+
+      .timer-area {
+        margin-top: 0.35rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .timer-track {
+        height: 7px;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <main class="stream-viewport">
+
+    <!-- Background -->
+    <div class="bg-grid"></div>
+    <div class="ambient-light-top"></div>
+    <div class="ambient-light-bottom"></div>
+
+
+    <!-- =========================================
+         HEADER
+         ========================================= -->
+
+    <header class="relative z-10 flex flex-col items-center text-center">
+
+      <!-- LIVE + CHANNEL -->
+
+      <div class="flex items-center space-x-1.5 mb-1">
+
+        <div
+          class="flex items-center space-x-1
+                 px-2 py-0.5
+                 rounded-full
+                 bg-red-500/15
+                 border border-red-500/30">
+
+          <span
+            class="w-1.5 h-1.5
+                   rounded-full
+                   bg-red-500
+                   animate-ping">
+          </span>
+
+          <span
+            class="text-[9px]
+                   font-extrabold
+                   tracking-widest
+                   text-red-400
+                   uppercase">
+            LIVE
+          </span>
+
+        </div>
+
+
+        <h1
+          id="ui-channel-name"
+          class="text-lg md:text-xl
+                 font-black
+                 tracking-tight
+                 text-white
+                 font-display
+                 uppercase">
+
+          UPMSP Solutions
+
+        </h1>
+
+      </div>
+
+
+      <!-- CLASS + SUBJECT -->
+
+      <div
+        class="inline-flex
+               items-center
+               space-x-1.5
+               px-2.5 py-0.5
+               rounded-full
+               bg-gradient-to-r
+               from-blue-900/60
+               via-slate-900/80
+               to-blue-900/60
+               border
+               border-cyan-400/40">
+
+        <span
+          class="w-1.5 h-1.5
+                 rounded-full
+                 bg-cyan-400">
+        </span>
+
+        <span
+          id="ui-class-subject"
+          class="text-[10px] md:text-xs
+                 font-bold
+                 tracking-wider
+                 text-cyan-300
+                 uppercase">
+
+          CLASS 10 • SCIENCE
+
+        </span>
+
+        <span
+          class="w-1.5 h-1.5
+                 rounded-full
+                 bg-cyan-400">
+        </span>
+
+      </div>
+
+
+      <!-- SUBTITLE -->
+
+      <p
+        class="text-[9px]
+               font-medium
+               tracking-wide
+               text-slate-400
+               uppercase
+               mt-1">
+
+        UP Board MCQ Live Quiz
+
+      </p>
+
+    </header>
+
+
+    <!-- =========================================
+         TIMER BAR
+         ONLY BAR — NO TEXT
+         ========================================= -->
+
+    <div class="timer-area">
+
+      <div class="timer-track">
+
+        <div
+          id="ui-timer-bar"
+          class="timer-fill
+                 timer-normal">
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =========================================
+         QUESTION AREA
+         ========================================= -->
+
+    <section
+      id="question-container"
+      class="animate-content-switch">
+
+      <!-- QUESTION COUNTER -->
+
+      <div class="question-counter">
+
+        <div class="question-counter-inner">
+
+          <span
+            id="ui-question-counter"
+            class="text-[10px] md:text-xs
+                   font-extrabold
+                   tracking-widest
+                   text-slate-300
+                   font-display
+                   uppercase">
+
+            QUESTION 01 / 60
+
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- QUESTION CARD -->
+
+      <div class="question-card">
+
+        <p
+          id="ui-question-text"
+          class="question-text
+                 text-base
+                 md:text-lg
+                 font-bold
+                 text-slate-100
+                 text-center
+                 leading-relaxed">
+
+          Loading next question...
+
+        </p>
+
+      </div>
+
+
+      <!-- OPTIONS -->
+
+      <div
+        id="ui-options-grid"
+        class="options-grid">
+
+
+        <!-- OPTION A -->
+
+        <div
+          id="option-card-0"
+          class="option-card
+                 flex
+                 items-center
+                 p-2
+                 md:p-2.5
+                 rounded-lg">
+
+          <div
+            id="option-badge-0"
+            class="option-letter
+                   w-7 h-7
+                   md:w-8 md:h-8
+                   flex-shrink-0
+                   flex
+                   items-center
+                   justify-center
+                   rounded-md
+                   font-display
+                   text-xs
+                   md:text-sm
+                   font-bold
+                   mr-2.5">
+
+            A
+
+          </div>
+
+          <span
+            id="option-text-0"
+            class="text-xs
+                   md:text-sm
+                   font-semibold
+                   text-slate-200
+                   leading-snug">
+
+            Option A
+
+          </span>
+
+        </div>
+
+
+        <!-- OPTION B -->
+
+        <div
+          id="option-card-1"
+          class="option-card
+                 flex
+                 items-center
+                 p-2
+                 md:p-2.5
+                 rounded-lg">
+
+          <div
+            id="option-badge-1"
+            class="option-letter
+                   w-7 h-7
+                   md:w-8 md:h-8
+                   flex-shrink-0
+                   flex
+                   items-center
+                   justify-center
+                   rounded-md
+                   font-display
+                   text-xs
+                   md:text-sm
+                   font-bold
+                   mr-2.5">
+
+            B
+
+          </div>
+
+          <span
+            id="option-text-1"
+            class="text-xs
+                   md:text-sm
+                   font-semibold
+                   text-slate-200
+                   leading-snug">
+
+            Option B
+
+          </span>
+
+        </div>
+
+
+        <!-- OPTION C -->
+
+        <div
+          id="option-card-2"
+          class="option-card
+                 flex
+                 items-center
+                 p-2
+                 md:p-2.5
+                 rounded-lg">
+
+          <div
+            id="option-badge-2"
+            class="option-letter
+                   w-7 h-7
+                   md:w-8 md:h-8
+                   flex-shrink-0
+                   flex
+                   items-center
+                   justify-center
+                   rounded-md
+                   font-display
+                   text-xs
+                   md:text-sm
+                   font-bold
+                   mr-2.5">
+
+            C
+
+          </div>
+
+          <span
+            id="option-text-2"
+            class="text-xs
+                   md:text-sm
+                   font-semibold
+                   text-slate-200
+                   leading-snug">
+
+            Option C
+
+          </span>
+
+        </div>
+
+
+        <!-- OPTION D -->
+
+        <div
+          id="option-card-3"
+          class="option-card
+                 flex
+                 items-center
+                 p-2
+                 md:p-2.5
+                 rounded-lg">
+
+          <div
+            id="option-badge-3"
+            class="option-letter
+                   w-7 h-7
+                   md:w-8 md:h-8
+                   flex-shrink-0
+                   flex
+                   items-center
+                   justify-center
+                   rounded-md
+                   font-display
+                   text-xs
+                   md:text-sm
+                   font-bold
+                   mr-2.5">
+
+            D
+
+          </div>
+
+          <span
+            id="option-text-3"
+            class="text-xs
+                   md:text-sm
+                   font-semibold
+                   text-slate-200
+                   leading-snug">
+
+            Option D
+
+          </span>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================================
+         FOOTER
+         ========================================= -->
+
+    <footer>
+
+      <div class="footer-line">
+
+        <span
+          class="tracking-wider
+                 uppercase
+                 font-semibold
+                 text-slate-400/70">
+
+          UPMSP Solutions
+
+        </span>
+
+        <span
+          class="tracking-widest
+                 uppercase
+                 text-slate-400/70">
+
+          Learn • Practice • Succeed
+
+        </span>
+
+      </div>
+
+    </footer>
+
+  </main>
+
+
+  <script>
+
+    /* =====================================================
+       CONFIGURATION
+       ===================================================== */
+
+    const CONFIG = {
+
+      API_URL:
+        "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL",
+
+      QUESTION_TIME: 30,
+
+      ANSWER_TIME: 5,
+
+      CHANNEL_NAME:
+        "UPMSP Solutions",
+
+      CLASS_NAME:
+        "Class 10",
+
+      SUBJECT_NAME:
+        "Science",
+
+      LOOP_QUIZ:
+        true
+
+    };
+
+
+    /* =====================================================
+       CLASS 10 SCIENCE
+       UNIQUE QUESTION BANK
+       TOTAL = 60
+       ===================================================== */
+
+    const FALLBACK_QUESTIONS = [
+
+      /* =========================
+         PHYSICS / LIGHT
+         ========================= */
+
+      {
+        question:
+          "किस दर्पण के सामने किसी वस्तु को रखने पर उसका प्रतिबिंब वास्तविक, उल्टा तथा आकार में कुछ छोटा बनता है?",
+
+        options: [
+          "उत्तल दर्पण",
+          "अवतल दर्पण",
+          "समतल दर्पण",
+          "इनमें से कोई नहीं"
+        ],
+
+        answer:
+          "अवतल दर्पण"
+      },
+
+      {
+        question:
+          "एक लेंस के सामने रखी किसी वस्तु का प्रतिबिंब उसी लेंस से वस्तु की अपेक्षा तीन गुनी दूरी पर बनता है। प्रतिबिंब का आवर्धन कितना होगा?",
+
+        options: [
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+
+        answer:
+          "3"
+      },
+
+      {
+        question:
+          "एक अवतल लेंस की फोकस दूरी 5 m है। उसकी क्षमता क्या होगी?",
+
+        options: [
+          "0.2 D",
+          "−0.2 D",
+          "2.0 D",
+          "5.0 D"
+        ],
+
+        answer:
+          "−0.2 D"
+      },
+
+      {
+        question:
+          "प्रकाश का वेग निम्नलिखित में किस माध्यम में सबसे अधिक होता है?",
+
+        options: [
+          "वायु",
+          "काँच",
+          "जल",
+          "निर्वात"
+        ],
+
+        answer:
+          "निर्वात"
+      },
+
+      {
+        question:
+          "एक उत्तल दर्पण की वक्रता त्रिज्या 32 cm है। उसकी फोकस दूरी कितनी होगी?",
+
+        options: [
+          "32 cm",
+          "16 cm",
+          "64 cm",
+          "8 cm"
+        ],
+
+        answer:
+          "16 cm"
+      },
+
+      {
+        question:
+          "स्वस्थ आँख का निकट-बिंदु कितनी दूरी पर होता है?",
+
+        options: [
+          "25 cm",
+          "50 cm",
+          "100 cm",
+          "अनंत"
+        ],
+
+        answer:
+          "25 cm"
+      },
+
+      {
+        question:
+          "दूर-दृष्टि दोष में वस्तु का प्रतिबिंब कहाँ बनता है?",
+
+        options: [
+          "रेटिना पर",
+          "रेटिना से आगे",
+          "रेटिना के पीछे",
+          "नेत्र-लेंस पर"
+        ],
+
+        answer:
+          "रेटिना के पीछे"
+      },
+
+      {
+        question:
+          "एक उत्तल दर्पण की फोकस दूरी 20 cm है। उसकी वक्रता त्रिज्या कितनी होगी?",
+
+        options: [
+          "10 cm",
+          "20 cm",
+          "40 cm",
+          "80 cm"
+        ],
+
+        answer:
+          "40 cm"
+      },
+
+      {
+        question:
+          "किसी गोलीय दर्पण तथा किसी पतले गोलीय लेंस दोनों की फोकस दूरियाँ −15 cm हैं। दर्पण तथा लेंस संभवतः कौन-से हैं?",
+
+        options: [
+          "दोनों अवतल",
+          "दोनों उत्तल",
+          "दर्पण अवतल तथा लेंस उत्तल",
+          "दर्पण उत्तल तथा लेंस अवतल"
+        ],
+
+        answer:
+          "दोनों अवतल"
+      },
+
+      {
+        question:
+          "किसी बिंब का वास्तविक तथा समान आकार का प्रतिबिंब प्राप्त करने के लिए बिंब को उत्तल लेंस के सामने कहाँ रखना चाहिए?",
+
+        options: [
+          "लेंस के मुख्य फोकस पर",
+          "फोकस दूरी की दो गुनी दूरी पर",
+          "अनंत पर",
+          "लेंस के प्रकाशिक केंद्र तथा मुख्य फोकस के बीच"
+        ],
+
+        answer:
+          "फोकस दूरी की दो गुनी दूरी पर"
+      },
+
+
+      /* =========================
+         ELECTRICITY
+         ========================= */
+
+      {
+        question:
+          "किसी विद्युत परिपथ में बहने वाली विद्युत धारा का SI मात्रक क्या है?",
+
+        options: [
+          "एम्पियर",
+          "वाट",
+          "ओम",
+          "वोल्ट"
+        ],
+
+        answer:
+          "एम्पियर"
+      },
+
+      {
+        question:
+          "परिवर्तनशील चुंबकीय क्षेत्र के कारण किसी चालक में उत्पन्न प्रेरित विद्युत धारा की दिशा का आकलन किस नियम से किया जाता है?",
+
+        options: [
+          "दाएँ हाथ के अंगूठे का नियम",
+          "ओम का नियम",
+          "फ्लेमिंग के बाएँ हाथ का नियम",
+          "फ्लेमिंग के दाएँ हाथ का नियम"
+        ],
+
+        answer:
+          "फ्लेमिंग के दाएँ हाथ का नियम"
+      },
+
+      {
+        question:
+          "1.5 V विद्युत वाहक बल वाले सेल का आंतरिक प्रतिरोध 3 Ω है। सेल से प्राप्त धारा का अधिकतम मान कितना होगा?",
+
+        options: [
+          "1.5 A",
+          "0.5 A",
+          "3.0 A",
+          "3.0 mA"
+        ],
+
+        answer:
+          "0.5 A"
+      },
+
+      {
+        question:
+          "एक LED इंडिकेटर 0.75 V एवं 100 mA पर कार्य करता है। इसकी शक्ति कितनी होगी?",
+
+        options: [
+          "75 mW",
+          "100 mW",
+          "0.75 W",
+          "7.5 mW"
+        ],
+
+        answer:
+          "75 mW"
+      },
+
+      {
+        question:
+          "ओम के नियम के अनुसार धारा तथा विभवांतर के बीच ग्राफ कैसा होता है?",
+
+        options: [
+          "एक सरल रेखा",
+          "वृत्त",
+          "टेढ़ी-मेढ़ी रेखा",
+          "इनमें से कोई नहीं"
+        ],
+
+        answer:
+          "एक सरल रेखा"
+      },
+
+      {
+        question:
+          "एक लघुपथित परिपथ में विद्युत धारा का मान कैसा होता है?",
+
+        options: [
+          "शून्य",
+          "न्यूनतम",
+          "अधिकतम",
+          "सदैव स्थिर"
+        ],
+
+        answer:
+          "अधिकतम"
+      },
+
+      {
+        question:
+          "प्रतिरोध का SI मात्रक क्या है?",
+
+        options: [
+          "कूलॉम",
+          "ओम",
+          "जूल",
+          "ओम-मीटर"
+        ],
+
+        answer:
+          "ओम"
+      },
+
+      {
+        question:
+          "वैद्युत मोटर किस ऊर्जा को किस ऊर्जा में परिवर्तित करती है?",
+
+        options: [
+          "रासायनिक ऊर्जा को यांत्रिक ऊर्जा में",
+          "यांत्रिक ऊर्जा को रासायनिक ऊर्जा में",
+          "यांत्रिक ऊर्जा को वैद्युत ऊर्जा में",
+          "वैद्युत ऊर्जा को यांत्रिक ऊर्जा में"
+        ],
+
+        answer:
+          "वैद्युत ऊर्जा को यांत्रिक ऊर्जा में"
+      },
+
+      {
+        question:
+          "बिजली के बल्ब का तंतु (फिलामेंट) किसका बना होता है?",
+
+        options: [
+          "नाइक्रोम",
+          "स्टील",
+          "टिन",
+          "टंगस्टन"
+        ],
+
+        answer:
+          "टंगस्टन"
+      },
+
+      {
+        question:
+          "दो समान प्रतिरोध वाले तारों को पहले श्रेणीक्रम में और फिर समान्तर क्रम में जोड़ा जाता है। समान विभवांतर पर उत्पन्न ऊष्मा का श्रेणीक्रम : समान्तर क्रम अनुपात क्या होगा?",
+
+        options: [
+          "1 : 2",
+          "1 : 4",
+          "4 : 1",
+          "2 : 1"
+        ],
+
+        answer:
+          "1 : 4"
+      },
+
+      {
+        question:
+          "प्रतिरोध R के एक तार को पाँच बराबर भागों में काटकर इन भागों को समान्तर क्रम में जोड़ा जाता है। यदि तुल्य प्रतिरोध R′ है, तो R/R′ का मान क्या होगा?",
+
+        options: [
+          "1/15",
+          "1/5",
+          "5",
+          "25"
+        ],
+
+        answer:
+          "25"
+      },
+
+
+      /* =========================
+         CHEMISTRY
+         ========================= */
+
+      {
+        question:
+          "एथिल एल्कोहॉल का IUPAC नाम क्या है?",
+
+        options: [
+          "मेथेनल",
+          "एथेनल",
+          "एथेनॉल",
+          "प्रोपेनॉल"
+        ],
+
+        answer:
+          "एथेनॉल"
+      },
+
+      {
+        question:
+          "क्षारीय विलयन का pH मान सामान्यतः कैसा होता है?",
+
+        options: [
+          "शून्य",
+          "7",
+          "7 से कम",
+          "7 से अधिक"
+        ],
+
+        answer:
+          "7 से अधिक"
+      },
+
+      {
+        question:
+          "श्याम-श्वेत फोटोग्राफी में निम्नलिखित में से किस यौगिक का उपयोग किया जाता है?",
+
+        options: [
+          "AgCl",
+          "Pb(NO₃)₂",
+          "FeSO₄",
+          "CaCO₃"
+        ],
+
+        answer:
+          "AgCl"
+      },
+
+      {
+        question:
+          "H₂SO₄ के जलीय विलयन का pH मान कैसा होगा?",
+
+        options: [
+          "0",
+          "7 से कम",
+          "7",
+          "7 से अधिक"
+        ],
+
+        answer:
+          "7 से कम"
+      },
+
+      {
+        question:
+          "निम्नलिखित में से कौन-सी धातु अम्ल से हाइड्रोजन को विस्थापित नहीं करती है?",
+
+        options: [
+          "Fe",
+          "Zn",
+          "Mg",
+          "Cu"
+        ],
+
+        answer:
+          "Cu"
+      },
+
+      {
+        question:
+          "निम्नलिखित में से कौन-सा एल्डिहाइड है?",
+
+        options: [
+          "मेथेनॉल",
+          "मेथेनल",
+          "एथेनॉल",
+          "एथेन"
+        ],
+
+        answer:
+          "मेथेनल"
+      },
+
+      {
+        question:
+          "निम्नलिखित में से कौन-सा तत्व धात्विक है?",
+
+        options: [
+          "P",
+          "He",
+          "Li",
+          "S"
+        ],
+
+        answer:
+          "Li"
+      },
+
+      {
+        question:
+          "कौन-सा कार्बनिक यौगिक असंतृप्त यौगिक है?",
+
+        options: [
+          "एथेन",
+          "मेथेन",
+          "एथीन",
+          "एथिल एल्कोहॉल"
+        ],
+
+        answer:
+          "एथीन"
+      },
+
+      {
+        question:
+          "धोने के सोडा (Washing Soda) का रासायनिक सूत्र क्या है?",
+
+        options: [
+          "NaHCO₃",
+          "Na₂CO₃·10H₂O",
+          "CaOCl₂",
+          "NaOH"
+        ],
+
+        answer:
+          "Na₂CO₃·10H₂O"
+      },
+
+      {
+        question:
+          "निम्नलिखित में से कौन-सा तत्व तनु अम्ल के साथ अभिक्रिया करके हाइड्रोजन गैस निकालता है?",
+
+        options: [
+          "क्लोरीन",
+          "ताँबा",
+          "जस्ता",
+          "सल्फर"
+        ],
+
+        answer:
+          "जस्ता"
+      },
+
+      {
+        question:
+          "निम्नलिखित में से कौन-सा तत्व द्वितीय समूह का सदस्य है?",
+
+        options: [
+          "Li",
+          "Mg",
+          "B",
+          "Si"
+        ],
+
+        answer:
+          "Mg"
+      },
+
+      {
+        question:
+          "संतृप्त हाइड्रोकार्बन में निम्नलिखित में से क्या नहीं होता है?",
+
+        options: [
+          "एकल आबंध",
+          "चतुष्फलकीय संरचना",
+          "C–C आबंध कोण 109°28′",
+          "C=C"
+        ],
+
+        answer:
+          "C=C"
+      },
+
+      {
+        question:
+          "प्रोपेनैल में कौन-सा क्रियात्मक समूह उपस्थित होता है?",
+
+        options: [
+          "–CHO",
+          ">C=O",
+          "–OH",
+          "–COOH"
+        ],
+
+        answer:
+          "–CHO"
+      },
+
+      {
+        question:
+          "निम्नलिखित यौगिकों में अम्लीय लवण कौन-सा है?",
+
+        options: [
+          "NaCl",
+          "Na₂SO₄",
+          "NaHSO₄",
+          "KCN"
+        ],
+
+        answer:
+          "NaHSO₄"
+      },
+
+
+      /* =========================
+         BIOLOGY
+         ========================= */
+
+      {
+        question:
+          "मनुष्य के हृदय में कोष्ठों की संख्या कितनी होती है?",
+
+        options: [
+          "एक",
+          "दो",
+          "तीन",
+          "चार"
+        ],
+
+        answer:
+          "चार"
+      },
+
+      {
+        question:
+          "द्वार कोशिकाएँ कहाँ पाई जाती हैं?",
+
+        options: [
+          "जड़ों में",
+          "रंध्रों में",
+          "वात रंध्रों में",
+          "पत्तियों के रंध्रों में"
+        ],
+
+        answer:
+          "रंध्रों में"
+      },
+
+      {
+        question:
+          "पौधों में कायिक प्रवर्धन के लिए निम्नलिखित में से कौन-सा भाग अधिक अनुकूल है?",
+
+        options: [
+          "तना",
+          "पत्ती",
+          "जड़",
+          "प्रकलिका"
+        ],
+
+        answer:
+          "तना"
+      },
+
+      {
+        question:
+          "जाइगोट में गुणसूत्रों की संख्या होती है:",
+
+        options: [
+          "4x",
+          "3x",
+          "2x",
+          "x"
+        ],
+
+        answer:
+          "2x"
+      },
+
+      {
+        question:
+          "निम्नलिखित में से कौन-सा मानव में मादा जनन तंत्र का भाग नहीं है?",
+
+        options: [
+          "अंडाशय",
+          "गर्भाशय",
+          "शुक्रवाहिका",
+          "डिंबवाहिनी नली"
+        ],
+
+        answer:
+          "शुक्रवाहिका"
+      },
+
+      {
+        question:
+          "स्वपोषी पोषण के लिए निम्नलिखित में से क्या आवश्यक है?",
+
+        options: [
+          "कार्बन डाइऑक्साइड तथा जल",
+          "क्लोरोफिल",
+          "सूर्य का प्रकाश",
+          "उपर्युक्त सभी"
+        ],
+
+        answer:
+          "उपर्युक्त सभी"
+      },
+
+      {
+        question:
+          "परागकोश में क्या पाए जाते हैं?",
+
+        options: [
+          "बाह्यदल",
+          "अंडाशय",
+          "परागकण",
+          "बीजांड"
+        ],
+
+        answer:
+          "परागकण"
+      },
+
+      {
+        question:
+          "पादप में जाइलम (Xylem) का मुख्य कार्य क्या है?",
+
+        options: [
+          "जल का संवहन",
+          "भोजन का संवहन",
+          "अमीनो अम्ल का संवहन",
+          "ऑक्सीजन का संवहन"
+        ],
+
+        answer:
+          "जल का संवहन"
+      },
+
+      {
+        question:
+          "मस्तिष्क निम्नलिखित में से किसके लिए उत्तरदायी है?",
+
+        options: [
+          "सोचने के लिए",
+          "शरीर का संतुलन बनाए रखने के लिए",
+          "हृदय स्पंदन के लिए",
+          "उपर्युक्त सभी"
+        ],
+
+        answer:
+          "उपर्युक्त सभी"
+      },
+
+      {
+        question:
+          "समजात अंग का उदाहरण कौन-सा है?",
+
+        options: [
+          "मनुष्य का हाथ तथा कुत्ते का अग्रपाद",
+          "आलू तथा घास",
+          "मछली का पंख तथा पक्षी का पंख",
+          "आँख तथा कैमरा"
+        ],
+
+        answer:
+          "मनुष्य का हाथ तथा कुत्ते का अग्रपाद"
+      },
+
+      {
+        question:
+          "अंतरिक्ष यात्रियों को आकाश किस रंग का दिखाई देता है?",
+
+        options: [
+          "काला",
+          "नीला",
+          "बैंगनी",
+          "हरा"
+        ],
+
+        answer:
+          "काला"
+      },
+
+      {
+        question:
+          "प्रचलित रूप से कोशिका का 'ऊर्जा गृह' किसे कहा जाता है?",
+
+        options: [
+          "क्लोरोप्लास्ट",
+          "राइबोसोम",
+          "माइटोकॉन्ड्रिया",
+          "लाइसोसोम"
+        ],
+
+        answer:
+          "माइटोकॉन्ड्रिया"
+      },
+
+      {
+        question:
+          "मानव वृक्क (Kidney) का मुख्य कार्य क्या है?",
+
+        options: [
+          "श्वसन",
+          "प्रोटीन संश्लेषण",
+          "हार्मोन संश्लेषण",
+          "उत्सर्जन"
+        ],
+
+        answer:
+          "उत्सर्जन"
+      },
+
+      {
+        question:
+          "केवल प्रोटीन से बने होते हैं:",
+
+        options: [
+          "क्लोरोप्लास्ट",
+          "लाइसोसोम",
+          "प्रायन्स",
+          "जीन्स"
+        ],
+
+        answer:
+          "प्रायन्स"
+      },
+
+      {
+        question:
+          "लघु पथन के कारण परिपथ में विद्युत धारा का मान क्या होता है?",
+
+        options: [
+          "बहुत कम हो जाता है",
+          "परिवर्तित नहीं होता",
+          "बहुत अधिक बढ़ जाता है",
+          "निरंतर परिवर्तित होता है"
+        ],
+
+        answer:
+          "बहुत अधिक बढ़ जाता है"
+      },
+
+      {
+        question:
+          "जीवाश्म ईंधन का उदाहरण कौन-सा है?",
+
+        options: [
+          "पवन ऊर्जा",
+          "सौर ऊर्जा",
+          "कोयला",
+          "जल-विद्युत"
+        ],
+
+        answer:
+          "कोयला"
+      },
+
+
+      /* =========================
+         MORE IMPORTANT MIXED
+         ========================= */
+
+      {
+        question:
+          "जीवाश्म ईंधन का एक अन्य प्रमुख उदाहरण कौन-सा है?",
+
+        options: [
+          "सौर ऊर्जा",
+          "पेट्रोलियम",
+          "पवन ऊर्जा",
+          "जल-विद्युत"
+        ],
+
+        answer:
+          "पेट्रोलियम"
+      },
+
+      {
+        question:
+          "गर्म जल प्राप्त करने के लिए सौर जल तापक का उपयोग निम्नलिखित में से किस दिन नहीं किया जा सकता?",
+
+        options: [
+          "धूप वाले दिन",
+          "बादलों वाले दिन",
+          "गरम दिन",
+          "पवन वाले दिन"
+        ],
+
+        answer:
+          "बादलों वाले दिन"
+      },
+
+      {
+        question:
+          "मुकुलन (Budding) किस जीव में पाया जाता है?",
+
+        options: [
+          "प्लैनेरिया",
+          "हाइड्रा",
+          "लीशमैनिया",
+          "अमीबा"
+        ],
+
+        answer:
+          "हाइड्रा"
+      },
+
+      {
+        question:
+          "निम्नलिखित में से कौन-सा मानव मादा जनन तंत्र का भाग नहीं है?",
+
+        options: [
+          "अंडाशय",
+          "गर्भाशय",
+          "शुक्रवाहिका",
+          "डिंबवाहिनी"
+        ],
+
+        answer:
+          "शुक्रवाहिका"
+      },
+
+      {
+        question:
+          "प्रकाश संश्लेषण के दौरान कौन-सी गैस मुक्त होती है?",
+
+        options: [
+          "कार्बन डाइऑक्साइड",
+          "नाइट्रोजन",
+          "ऑक्सीजन",
+          "हाइड्रोजन"
+        ],
+
+        answer:
+          "ऑक्सीजन"
+      },
+
+      {
+        question:
+          "मनुष्य में वृक्क किस तंत्र का प्रमुख अंग है?",
+
+        options: [
+          "पोषण तंत्र",
+          "श्वसन तंत्र",
+          "उत्सर्जन तंत्र",
+          "परिवहन तंत्र"
+        ],
+
+        answer:
+          "उत्सर्जन तंत्र"
+      },
+
+      {
+        question:
+          "निम्नलिखित में से कौन-सा पादप हॉर्मोन है?",
+
+        options: [
+          "इंसुलिन",
+          "थायरॉक्सिन",
+          "एस्ट्रोजन",
+          "साइटोकाइनिन"
+        ],
+
+        answer:
+          "साइटोकाइनिन"
+      },
+
+      {
+        question:
+          "पौधों में जाइलम मुख्य रूप से किसका परिवहन करता है?",
+
+        options: [
+          "जल",
+          "भोजन",
+          "हार्मोन",
+          "ऑक्सीजन"
+        ],
+
+        answer:
+          "जल"
+      },
+
+      {
+        question:
+          "निम्नलिखित में से कौन-सा लिंग-संबंधी गुणसूत्र का उदाहरण है?",
+
+        options: [
+          "X",
+          "Na",
+          "Mg",
+          "Cl"
+        ],
+
+        answer:
+          "X"
+      },
+
+      {
+        question:
+          "सामान्य दृष्टि के वयस्क के लिए सुस्पष्ट दर्शन की न्यूनतम दूरी कितनी होती है?",
+
+        options: [
+          "2.5 cm",
+          "25 cm",
+          "2.5 m",
+          "25 m"
+        ],
+
+        answer:
+          "25 cm"
+      },
+
+      {
+        question:
+          "प्रतिरोध R के किसी तार को पाँच बराबर भागों में काटकर समान्तर क्रम में जोड़ा जाए, तो तुल्य प्रतिरोध R′ होगा:",
+
+        options: [
+          "R/5",
+          "R/10",
+          "R/25",
+          "5R"
+        ],
+
+        answer:
+          "R/25"
+      },
+
+      {
+        question:
+          "निम्नलिखित में से कौन-सा यौगिक संतृप्त हाइड्रोकार्बन है?",
+
+        options: [
+          "एथीन",
+          "एथाइन",
+          "एथेन",
+          "बेंजीन"
+        ],
+
+        answer:
+          "एथेन"
+      },
+
+      {
+        question:
+          "निम्नलिखित में से कौन-सा यौगिक असंतृप्त हाइड्रोकार्बन है?",
+
+        options: [
+          "मेथेन",
+          "एथेन",
+          "एथीन",
+          "प्रोपेन"
+        ],
+
+        answer:
+          "एथीन"
+      },
+
+      {
+        question:
+          "विरंजक चूर्ण (Bleaching Powder) का रासायनिक सूत्र क्या है?",
+
+        options: [
+          "NaHCO₃",
+          "CaOCl₂",
+          "Na₂CO₃",
+          "CaCO₃"
+        ],
+
+        answer:
+          "CaOCl₂"
+      },
+
+      {
+        question:
+          "शुद्ध जल का pH मान कितना होता है?",
+
+        options: [
+          "0",
+          "1",
+          "7",
+          "14"
+        ],
+
+        answer:
+          "7"
+      },
+
+      {
+        question:
+          "लोहे पर जंग लगना किस प्रकार की प्रक्रिया है?",
+
+        options: [
+          "अपचयन",
+          "संक्षारण",
+          "विस्थापन",
+          "उदासीनीकरण"
+        ],
+
+        answer:
+          "संक्षारण"
+      },
+
+      {
+        question:
+          "मेंडल ने आनुवंशिकता के प्रयोग किस पौधे पर किए थे?",
+
+        options: [
+          "गुलाब",
+          "मटर",
+          "गेहूँ",
+          "सरसों"
+        ],
+
+        answer:
+          "मटर"
+      },
+
+      {
+        question:
+          "उत्तल लेंस की क्षमता का SI-संगत व्यावहारिक मात्रक क्या है?",
+
+        options: [
+          "मीटर",
+          "डायोप्टर",
+          "वाट",
+          "न्यूटन"
+        ],
+
+        answer:
+          "डायोप्टर"
+      },
+
+      {
+        question:
+          "वैद्युत धारा को मापने के लिए किस यंत्र का उपयोग किया जाता है?",
+
+        options: [
+          "वोल्टमीटर",
+          "ऐमीटर",
+          "ओममीटर",
+          "गैल्वेनोमीटर"
+        ],
+
+        answer:
+          "ऐमीटर"
+      },
+
+      {
+        question:
+          "प्रतिरोध का SI मात्रक क्या है?",
+
+        options: [
+          "वोल्ट",
+          "एम्पियर",
+          "ओम",
+          "वाट"
+        ],
+
+        answer:
+          "ओम"
+      },
+
+      {
+        question:
+          "किसी चालक का प्रतिरोध उसकी लंबाई बढ़ाने पर सामान्यतः क्या होता है?",
+
+        options: [
+          "घटता है",
+          "बढ़ता है",
+          "शून्य हो जाता है",
+          "अपरिवर्तित रहता है"
+        ],
+
+        answer:
+          "बढ़ता है"
+      }
+
+    ];
+
+
+    /* =====================================================
+       REMOVE DUPLICATES
+       ===================================================== */
+
+    function removeDuplicateQuestions(questions) {
+
+      const seen = new Set();
+
+      return questions.filter(q => {
+
+        const key =
+          q.question
+            .replace(/\s+/g, ' ')
+            .trim()
+            .toLowerCase();
+
+        if (seen.has(key)) {
+          return false;
+        }
+
+        seen.add(key);
+
+        return true;
+
+      });
+
+    }
+
+
+    /* =====================================================
+       STATE
+       ===================================================== */
+
+    let quizData = [];
+
+    let currentQuestionIndex = 0;
+
+    let phase = 'QUESTION';
+
+    let phaseStartTime = 0;
+
+    let animFrameId = null;
+
+    let currentDisplayedOptions = [];
+
+    let currentCorrectAnswerText = '';
+
+
+    /* =====================================================
+       DOM
+       ===================================================== */
+
+    const uiChannelName =
+      document.getElementById('ui-channel-name');
+
+    const uiClassSubject =
+      document.getElementById('ui-class-subject');
+
+    const uiQuestionCounter =
+      document.getElementById('ui-question-counter');
+
+    const uiQuestionText =
+      document.getElementById('ui-question-text');
+
+    const questionContainer =
+      document.getElementById('question-container');
+
+    const uiTimerBar =
+      document.getElementById('ui-timer-bar');
+
+
+    const optionCards = [
+
+      document.getElementById('option-card-0'),
+
+      document.getElementById('option-card-1'),
+
+      document.getElementById('option-card-2'),
+
+      document.getElementById('option-card-3')
+
+    ];
+
+
+    const optionBadges = [
+
+      document.getElementById('option-badge-0'),
+
+      document.getElementById('option-badge-1'),
+
+      document.getElementById('option-badge-2'),
+
+      document.getElementById('option-badge-3')
+
+    ];
+
+
+    const optionTexts = [
+
+      document.getElementById('option-text-0'),
+
+      document.getElementById('option-text-1'),
+
+      document.getElementById('option-text-2'),
+
+      document.getElementById('option-text-3')
+
+    ];
+
+
+    /* =====================================================
+       SHUFFLE
+       ===================================================== */
+
+    function shuffleArray(array) {
+
+      const arr = [...array];
+
+      for (
+        let i = arr.length - 1;
+        i > 0;
+        i--
+      ) {
+
+        const j =
+          Math.floor(
+            Math.random() * (i + 1)
+          );
+
+        [
+          arr[i],
+          arr[j]
+        ] =
+        [
+          arr[j],
+          arr[i]
+        ];
+
+      }
+
+      return arr;
+
+    }
+
+
+    /* =====================================================
+       HEADER CONFIG
+       ===================================================== */
+
+    function applyHeaderConfig() {
+
+      uiChannelName.textContent =
+        CONFIG.CHANNEL_NAME ||
+        "UPMSP Solutions";
+
+
+      uiClassSubject.textContent =
+        `${CONFIG.CLASS_NAME || "Class 10"} • ${CONFIG.SUBJECT_NAME || "Science"}`;
+
+    }
+
+
+    /* =====================================================
+       INITIALIZE QUESTIONS
+       ===================================================== */
+
+    async function initQuestions() {
+
+      applyHeaderConfig();
+
+
+      if (
+        CONFIG.API_URL &&
+        CONFIG.API_URL !==
+        "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL"
+      ) {
+
+        try {
+
+          const res =
+            await fetch(CONFIG.API_URL);
+
+          if (res.ok) {
+
+            const data =
+              await res.json();
+
+            if (
+              Array.isArray(data) &&
+              data.length > 0
+            ) {
+
+              quizData =
+                removeDuplicateQuestions(data);
+
+            }
+
+          }
+
+        }
+
+        catch (error) {
+
+          console.warn(
+            "Remote questions unavailable. Using built-in question bank.",
+            error
+          );
+
+        }
+
+      }
+
+
+      if (
+        !quizData ||
+        quizData.length === 0
+      ) {
+
+        quizData =
+          removeDuplicateQuestions(
+            FALLBACK_QUESTIONS
+          );
+
+      }
+
+
+      /* Initial shuffle */
+
+      quizData =
+        shuffleArray(quizData);
+
+
+      currentQuestionIndex = 0;
+
+
+      loadQuestion(
+        currentQuestionIndex
+      );
+
+    }
+
+
+    /* =====================================================
+       LOAD QUESTION
+       ===================================================== */
+
+    function loadQuestion(index) {
+
+      if (
+        index >= quizData.length
+      ) {
+
+        if (CONFIG.LOOP_QUIZ) {
+
+          quizData =
+            shuffleArray(quizData);
+
+          currentQuestionIndex = 0;
+
+          index = 0;
+
+        }
+
+        else {
+
+          return;
+
+        }
+
+      }
+
+
+      const q =
+        quizData[index];
+
+
+      currentCorrectAnswerText =
+        String(q.answer || '')
+          .trim();
+
+
+      /* Counter */
+
+      const qNumberStr =
+        String(index + 1)
+          .padStart(2, '0');
+
+
+      const totalStr =
+        String(quizData.length)
+          .padStart(2, '0');
+
+
+      uiQuestionCounter.textContent =
+        `QUESTION ${qNumberStr} / ${totalStr}`;
+
+
+      /* Animation */
+
+      questionContainer
+        .classList
+        .remove(
+          'animate-content-switch'
+        );
+
+
+      void questionContainer.offsetWidth;
+
+
+      questionContainer
+        .classList
+        .add(
+          'animate-content-switch'
+        );
+
+
+      /* Question */
+
+      uiQuestionText.textContent =
+        q.question;
+
+
+      /* Shuffle options */
+
+      const rawOptions =
+        Array.isArray(q.options)
+          ? [...q.options]
+          : [];
+
+
+      currentDisplayedOptions =
+        shuffleArray(rawOptions);
+
+
+      const letters =
+        ['A','B','C','D'];
+
+
+      for (
+        let i = 0;
+        i < 4;
+        i++
+      ) {
+
+        const card =
+          optionCards[i];
+
+        const badge =
+          optionBadges[i];
+
+        const textElem =
+          optionTexts[i];
+
+
+        /* Reset */
+
+        card.className =
+          'option-card flex items-center p-2 md:p-2.5 rounded-lg';
+
+
+        badge.className =
+          'option-letter w-7 h-7 md:w-8 md:h-8 flex-shrink-0 flex items-center justify-center rounded-md font-display text-xs md:text-sm font-bold mr-2.5';
+
+
+        badge.textContent =
+          letters[i];
+
+
+        if (
+          currentDisplayedOptions[i]
+        ) {
+
+          card.style.display =
+            'flex';
+
+          textElem.textContent =
+            currentDisplayedOptions[i];
+
+        }
+
+        else {
+
+          card.style.display =
+            'none';
+
+        }
+
+      }
+
+
+      startQuestionPhase();
+
+    }
+
+
+    /* =====================================================
+       QUESTION PHASE
+       ===================================================== */
+
+    function startQuestionPhase() {
+
+      phase =
+        'QUESTION';
+
+
+      phaseStartTime =
+        performance.now();
+
+
+      uiTimerBar.className =
+        'timer-fill timer-normal';
+
+
+      uiTimerBar.style.width =
+        '100%';
+
+
+      if (animFrameId) {
+
+        cancelAnimationFrame(
+          animFrameId
+        );
+
+      }
+
+
+      animFrameId =
+        requestAnimationFrame(
+          updateBroadcastLoop
+        );
+
+    }
+
+
+    /* =====================================================
+       REVEAL ANSWER
+       ===================================================== */
+
+    function revealAnswer() {
+
+      phase =
+        'ANSWER';
+
+
+      phaseStartTime =
+        performance.now();
+
+
+      for (
+        let i = 0;
+        i < 4;
+        i++
+      ) {
+
+        const optionVal =
+          String(
+            currentDisplayedOptions[i] ||
+            ''
+          ).trim();
+
+
+        const card =
+          optionCards[i];
+
+
+        const badge =
+          optionBadges[i];
+
+
+        if (
+          optionVal.toLowerCase() ===
+          currentCorrectAnswerText.toLowerCase()
+        ) {
+
+          card.classList.add(
+            'correct'
+          );
+
+          badge.innerHTML =
+            '✓';
+
+        }
+
+        else {
+
+          card.classList.add(
+            'dimmed'
+          );
+
+        }
+
+      }
+
+
+      /* Green answer timer */
+
+      uiTimerBar.className =
+        'timer-fill timer-answer';
+
+
+      uiTimerBar.style.width =
+        '100%';
+
+
+      if (animFrameId) {
+
+        cancelAnimationFrame(
+          animFrameId
+        );
+
+      }
+
+
+      animFrameId =
+        requestAnimationFrame(
+          updateBroadcastLoop
+        );
+
+    }
+
+
+    /* =====================================================
+       HIGH PRECISION TIMER
+       ===================================================== */
+
+    function updateBroadcastLoop(now) {
+
+
+      /* QUESTION PHASE */
+
+      if (phase === 'QUESTION') {
+
+        const duration =
+          CONFIG.QUESTION_TIME * 1000;
+
+
+        const elapsed =
+          now - phaseStartTime;
+
+
+        const remaining =
+          Math.max(
+            0,
+            duration - elapsed
+          );
+
+
+        const progress =
+          Math.max(
+            0,
+            remaining / duration
+          );
+
+
+        uiTimerBar.style.width =
+          (progress * 100).toFixed(2)
+          + '%';
+
+
+        const remainingSeconds =
+          remaining / 1000;
+
+
+        /* NORMAL */
+
+        if (
+          remainingSeconds > 10
+        ) {
+
+          if (
+            !uiTimerBar.classList.contains(
+              'timer-normal'
+            )
+          ) {
+
+            uiTimerBar.className =
+              'timer-fill timer-normal';
+
+          }
+
+        }
+
+
+        /* WARNING */
+
+        else if (
+          remainingSeconds > 5
+        ) {
+
+          if (
+            !uiTimerBar.classList.contains(
+              'timer-warning'
+            )
+          ) {
+
+            uiTimerBar.className =
+              'timer-fill timer-warning';
+
+          }
+
+        }
+
+
+        /* CRITICAL */
+
+        else {
+
+          if (
+            !uiTimerBar.classList.contains(
+              'timer-critical'
+            )
+          ) {
+
+            uiTimerBar.className =
+              'timer-fill timer-critical';
+
+          }
+
+        }
+
+
+        /* TIME OVER */
+
+        if (
+          remaining <= 0
+        ) {
+
+          uiTimerBar.style.width =
+            '0%';
+
+          revealAnswer();
+
+          return;
+
+        }
+
+
+        animFrameId =
+          requestAnimationFrame(
+            updateBroadcastLoop
+          );
+
+      }
+
+
+      /* ANSWER PHASE */
+
+      else if (
+        phase === 'ANSWER'
+      ) {
+
+        const duration =
+          CONFIG.ANSWER_TIME * 1000;
+
+
+        const elapsed =
+          now - phaseStartTime;
+
+
+        const remaining =
+          Math.max(
+            0,
+            duration - elapsed
+          );
+
+
+        const progress =
+          Math.max(
+            0,
+            remaining / duration
+          );
+
+
+        uiTimerBar.style.width =
+          (progress * 100).toFixed(2)
+          + '%';
+
+
+        if (
+          remaining <= 0
+        ) {
+
+          uiTimerBar.style.width =
+            '0%';
+
+
+          currentQuestionIndex++;
+
+
+          loadQuestion(
+            currentQuestionIndex
+          );
+
+
+          return;
+
+        }
+
+
+        animFrameId =
+          requestAnimationFrame(
+            updateBroadcastLoop
+          );
+
+      }
+
+    }
+
+
+    /* =====================================================
+       OBS / YOUTUBE AUTOSTART
+       ===================================================== */
+
+    window.addEventListener(
+      'DOMContentLoaded',
+      () => {
+
+        initQuestions();
+
+      }
+    );
+
+  </script>
+
+</body>
+</html>
